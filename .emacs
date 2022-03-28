@@ -253,7 +253,6 @@
   :custom
   (company-minimum-prefix-length 1)
   (company-idle-delay 0.0)
-  (global-company-mode t)
   (setq lsp-completion-provider :capf))
 
 (use-package company-box
