@@ -210,7 +210,7 @@
          (c-mode . lsp-deferred)
          (lsp-mode . lsp-enable-which-key-integration))
   :config
-  (setq lsp-enabled-clients '(ccls pylsp ts-ls))
+  (setq lsp-enabled-clients '(ccls pylsp ts-ls yamlls))
   (setq lsp-disabled-clients '(clangd))
   (setq lsp-auto-configure t)
   (setq lsp-pyls-plugins-flake8-enabled t)
@@ -374,7 +374,10 @@
   (python-shell-interpreter "python3"))
 
 (use-package yaml-mode
-  :ensure t)
+  :ensure t
+  :hook ((yaml-mode . lsp-deferred))
+  :config
+  (lsp-yaml-completion t))
 
 ;; C - Mode
 (setq c-default-style "k&r")
