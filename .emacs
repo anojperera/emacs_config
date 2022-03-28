@@ -374,9 +374,7 @@
 
 (use-package yaml-mode
   :ensure t
-  :hook ((yaml-mode . lsp-deferred))
-  :config
-  (lsp-yaml-completion t))
+  :hook ((yaml-mode . lsp-deferred)))
 
 ;; C - Mode
 (setq c-default-style "k&r")
