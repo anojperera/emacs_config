@@ -99,7 +99,7 @@
   ((doom-modeline-height 15)
    (setq doom-modeline-persp-icon t)
    (setq doom-modeline-lsp t)
-   (setq doom-modeline-github nil)
+   (setq doom-modeline-github t)
    (setq doom-modeline-modal-icon t)
    (setq doom-modeline-modal-icon t)
    (setq doom-modeline-env-version t)
@@ -158,38 +158,44 @@
   :config
   (setq org-ellipsis " ▾"))
 
-(use-package org-bullets
-  :after org
-  :hook (org-mode . org-bullets-mode)
-  :custom
-  (org-bullets-bullet-list ("◉" "○" "●" "○" "●" "○" "●"))
+(use-package org-superstar
+    :after org-mode
+    :hook (org-mode . org-superstar)
+    :config
+    (org-superstar-remove-leading-stars t)
+    (org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●")))
 
-  (dolist (face '((org-level-1 . 1.2)
-                  (org-level-2 . 1.1)
-                  (org-level-3 . 1.05)
-                  (org-level-4 . 1.0)
-                  (org-level-5 . 1.1)
-                  (org-level-6 . 1.1)
-                  (org-level-7 . 1.1)
-                  (org-level-8 . 1.1)))
+;; (use-package org-faces
+;;   ;; Make sure org-indent face is available
+;;   :load org-indent
+;;   :init
+;;     ;; Increase the size of various headings
+;;     (set-face-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
+  
+;;     (dolist (face '((org-level-1 . 1.2)
+;;                     (org-level-2 . 1.1)
+;;                     (org-level-3 . 1.05)
+;;                     (org-level-4 . 1.0)
+;;                     (org-level-5 . 1.1)
+;;                     (org-level-6 . 1.1)
+;;                     (org-level-7 . 1.1)
+;;                     (org-level-8 . 1.1)))
+;;       (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face)))
 
-    (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face))
+;;     ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+;;     (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+;;     (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
+;;     (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+;;     (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+;;     (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+;;     (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+;;     (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+;;     (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+;;     (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
 
-    ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-    (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
-    (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
-    (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-    (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
-    (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-    (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-    (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
-
-    ;; Get rid of the background on column views
-    (set-face-attribute 'org-column nil :background nil)
-    (set-face-attribute 'org-column-title nil :background nil)))
-
+;;     ;; Get rid of the background on column views
+;;     (set-face-attribute 'org-column nil :background nil)
+;;     (set-face-attribute 'org-column-title nil :background nil))
 
 ;; LSP Configuration
 (defun ap/lsp-mode-setup ()
@@ -234,7 +240,7 @@
 
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 (use-package lsp-treemacs
-  :after lsp)
+  :after lsp-mode)
 
 (use-package ccls
   :ensure t
@@ -320,8 +326,56 @@
   (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
   :hook ((c-mode c++-mode objc-mode cuda-mode) . (lambda () (require 'ccls) (lsp))))
 
+;; Elfeed
+;; use an org file to organise feeds
+(use-package elfeed-org
+  :ensure t
+  :config
+  (elfeed-org)
+  (setq rmh-elfeed-org-files (list "/Users/anoj/org/elfeed.org")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; elfeed feed reader                                                     ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;shortcut functions
+(defun ap/elfeed-show-all ()
+  (interactive)
+  (bookmark-maybe-load-default-file)
+  (bookmark-jump "elfeed-all"))
+(defun ap/elfeed-show-daily ()
+  (interactive)
+  (bookmark-maybe-load-default-file)
+  (bookmark-jump "elfeed-daily"))
+
+;;functions to support syncing .elfeed between machines
+;;makes sure elfeed reads index from disk before launching
+(defun ap/elfeed-load-db-and-open ()
+  "Wrapper to load the elfeed db from disk before opening"
+  (interactive)
+  (elfeed-db-load)
+  (elfeed)
+  (elfeed-search-update--force))
+
+;;write to disk when quiting
+(defun ap/elfeed-save-db-and-bury ()
+  "Wrapper to save the elfeed db to disk before burying buffer"
+  (interactive)
+  (elfeed-db-save)
+  (quit-window))
+
+(use-package elfeed
+  :ensure t
+  :bind (:map elfeed-search-mode-map
+              ("A" . ap/elfeed-show-all)
+              ("D" . ap/elfeed-show-daily)
+              ("q" . ap/elfeed-save-db-and-bury)))
+
 ;;////////////////////////////////////////////////////////////////////////////////////////////////////
 ;; Prog Setup
+(add-hook 'prog-mode-hook 'company-mode)
+(use-package git-gutter
+  :hook (prog-mode . git-gutter))
+
 (use-package json-mode
   :ensure t)
 ;; JSON Mode
@@ -329,7 +383,8 @@
 (use-package typescript-mode
   :mode "\\.ts\\'"
   :hook ((typescript-mode . lsp-deferred)
-         (typescript-mode . prettier-js))
+         (typescript-mode . prettier-js)
+         (typescript-mode . company-mode))
   :config
   (setq typescript-indent-level 2))
 
@@ -368,7 +423,8 @@
   :ensure t
   :hook ((python-mode . lsp-deferred)
          (python-mode . flycheck-mode)
-         (python-mode . blacken-mode))
+         (python-mode . blacken-mode)
+         (python-mode . company-mode))
   :custom
   (python-shell-interpreter "python3"))
 
@@ -403,7 +459,7 @@
    '("1704976a1797342a1b4ea7a75bdbb3be1569f4619134341bd5a4c1cfb16abad4" default))
  '(ivy-mode t)
  '(package-selected-packages
-   '(prettier-js web-mode json-mode expand-region company-lsp which-key lsp-imenu typescript-mode blacken dired-hide-dotfiles dired-open all-the-icons-dired dired-single company-box company lsp-treemacs lsp-ivy lsp-ui ccls ivy-xref eglot company-jedi lsp-jedi elpy yaml-mode flycheck ag iedit js2-mode python-mode org-bullets magit counsel-projectile projectile doom-themes helpful counsel ivy-rich rainbow-delimiters rainbow-delimeters doom-modeline ivy command-log-mode use-package)))
+   '(git-gutter+ org-superstar prettier-js web-mode json-mode expand-region company-lsp which-key lsp-imenu typescript-mode blacken dired-hide-dotfiles dired-open all-the-icons-dired dired-single company-box company lsp-treemacs lsp-ivy lsp-ui ccls ivy-xref eglot company-jedi lsp-jedi elpy yaml-mode flycheck ag iedit js2-mode python-mode org-bullets magit counsel-projectile projectile doom-themes helpful counsel ivy-rich rainbow-delimiters rainbow-delimeters doom-modeline ivy command-log-mode use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
