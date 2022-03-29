@@ -372,14 +372,25 @@
 
 ;;////////////////////////////////////////////////////////////////////////////////////////////////////
 ;; Prog Setup
-(add-hook 'prog-mode-hook 'company-mode)
-(use-package git-gutter
-  :hook (prog-mode . git-gutter))
+(use-package git-gutter)
+(git-gutter:linum-setup)
 
+(set-face-background 'git-gutter:modified "purple") ;; background color
+(set-face-foreground 'git-gutter:added "green")
+(set-face-foreground 'git-gutter:deleted "red")
+
+(custom-set-variables
+ '(git-gutter:lighter " GG"))
+
+(add-hook 'prog-mode-hook 'company-mode)
+(add-hook 'prog-mode-hook 'git-gutter)
+
+
+;; JSON Mode
 (use-package json-mode
   :ensure t)
-;; JSON Mode
 
+;; Typescript
 (use-package typescript-mode
   :mode "\\.ts\\'"
   :hook ((typescript-mode . lsp-deferred)
