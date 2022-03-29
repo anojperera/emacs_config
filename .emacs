@@ -372,8 +372,27 @@
 
 ;;////////////////////////////////////////////////////////////////////////////////////////////////////
 ;; Prog Setup
-(use-package git-gutter
-  :hook (prog-mode . git-gutter))
+(use-package git-gutter+
+  :hook (prog-mode . git-gutter+-mode)
+  :config 
+  (setq git-gutter+-modified-sign "=") ;; two space
+  (setq git-gutter+-added-sign "+")    ;; multiple character is OK
+  (setq git-gutter+-deleted-sign "-")
+  (setq git-gutter+-lighter " GG")
+  (progn
+    (define-key git-gutter+-mode-map (kbd "C-x n") 'git-gutter+-next-hunk)
+    (define-key git-gutter+-mode-map (kbd "C-x p") 'git-gutter+-previous-hunk)
+    (define-key git-gutter+-mode-map (kbd "C-x v =") 'git-gutter+-show-hunk)
+    (define-key git-gutter+-mode-map (kbd "C-x r") 'git-gutter+-revert-hunks)
+    (define-key git-gutter+-mode-map (kbd "C-x t") 'git-gutter+-stage-hunks)
+    (define-key git-gutter+-mode-map (kbd "C-x c") 'git-gutter+-commit)
+    (define-key git-gutter+-mode-map (kbd "C-x C") 'git-gutter+-stage-and-commit)
+    (define-key git-gutter+-mode-map (kbd "C-x C-y") 'git-gutter+-stage-and-commit-whole-buffer)
+    (define-key git-gutter+-mode-map (kbd "C-x U") 'git-gutter+-unstage-whole-buffer)))
+
+(set-face-background 'git-gutter+-modified "purple") ;; background color
+(set-face-foreground 'git-gutter+-added "green")
+(set-face-foreground 'git-gutter+-deleted "red")
 
 (add-hook 'prog-mode-hook 'company-mode)
 
