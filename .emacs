@@ -390,10 +390,6 @@
     (define-key git-gutter+-mode-map (kbd "C-x C-y") 'git-gutter+-stage-and-commit-whole-buffer)
     (define-key git-gutter+-mode-map (kbd "C-x U") 'git-gutter+-unstage-whole-buffer)))
 
-(set-face-background 'git-gutter+-modified "purple") ;; background color
-(set-face-foreground 'git-gutter+-added "green")
-(set-face-foreground 'git-gutter+-deleted "red")
-
 (add-hook 'prog-mode-hook 'company-mode)
 
 
