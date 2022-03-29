@@ -372,18 +372,10 @@
 
 ;;////////////////////////////////////////////////////////////////////////////////////////////////////
 ;; Prog Setup
-(use-package git-gutter)
-(git-gutter:linum-setup)
-
-(set-face-background 'git-gutter:modified "purple") ;; background color
-(set-face-foreground 'git-gutter:added "green")
-(set-face-foreground 'git-gutter:deleted "red")
-
-(custom-set-variables
- '(git-gutter:lighter " GG"))
+(use-package git-gutter
+  :hook (prog-mode . git-gutter))
 
 (add-hook 'prog-mode-hook 'company-mode)
-(add-hook 'prog-mode-hook 'git-gutter)
 
 
 ;; JSON Mode
