@@ -32,6 +32,9 @@ Plug 'dracula/vim', { 'as': 'dracula' }
 
 Plug 'jremmen/vim-ripgrep'
 Plug 'tpope/vim-fugitive'
+Plug 'vim-airline/vim-airline'
+Plug 'bling/vim-bufferline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'leafgarland/typescript-vim'
 Plug 'git@github.com:ctrlpvim/ctrlp.vim.git'
 Plug 'git@github.com:ycm-core/YouCompleteMe.git'
@@ -50,10 +53,6 @@ call plug#end()
 
 set modelines=1
 let mapleader = " " 
-nnoremap <leader>n :NERDTreeFocus<CR>
-nnoremap <C-n> :NERDTree<CR>
-nnoremap <C-t> :NERDTreeToggle<CR>
-nnoremap <C-f> :NERDTreeFind<CR>
 
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
@@ -80,6 +79,14 @@ endif
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_working_path_mode = 'ra'
+let g:airline_theme='badwolf'
+
+" Nerd tree shortcuts
+nnoremap <leader>n :NERDTreeFocus<CR>
+nnoremap <C-n> :NERDTree<CR>
+nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <C-f> :NERDTreeFind<CR>
+
 
 " You completer
 nnoremap <silent> <leader>gd :YouCompleter GoTo<CR>
@@ -100,3 +107,6 @@ nnoremap <leader>ps :Rg<SPACE>
 nnoremap <silent> <Leader>+ :vertical resize +5<CR>
 nnoremap <silent> <Leader>-5 :vertical resize -5<CR>
 nnoremap <leader>1 :only<CR>
+
+" Git shortcuts
+nnoremap <leader>gs :G<CR>
