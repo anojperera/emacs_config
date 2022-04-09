@@ -13,6 +13,10 @@ set nobackup
 set undodir=~/.vim/undodir
 set undofile
 set incsearch
+set nocompatible
+set hidden
+set encoding=utf-8
+set showtabline=0
 
 set cursorline
 hi cursorline cterm=none term=none
@@ -43,6 +47,8 @@ Plug 'git@github.com:Vimjas/vim-python-pep8-indent.git'
 Plug 'sheerun/vim-polyglot'
 Plug 'mbbill/undotree'
 Plug 'tpope/vim-commentary'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
 " Silver Searcher
 Plug 'mileszs/ack.vim'
@@ -80,6 +86,21 @@ let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_working_path_mode = 'ra'
 let g:airline_theme='badwolf'
+let g:fzf_layout = { 'down': '~40%' }
+
+" bind \ (backward slash) to grep shortcut
+" command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+nnoremap \ :Ag<SPACE>
+
+
+" FZF Config Settings
+command! -bang ProjectFiles call fzf#vim#files('~/Dev', <bang>0)
+command! -bang -nargs=? -complete=dir Files
+    \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--preview', 'cat {}']}, <bang>0)
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
+  \   fzf#vim#with_preview(), <bang>0)
 
 " Nerd tree shortcuts
 nnoremap <leader>n :NERDTreeFocus<CR>
