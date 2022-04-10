@@ -17,6 +17,7 @@ set nocompatible
 set hidden
 set encoding=utf-8
 set showtabline=0
+set background=dark
 
 set cursorline
 hi cursorline cterm=none term=none
@@ -49,6 +50,7 @@ Plug 'mbbill/undotree'
 Plug 'tpope/vim-commentary'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'dense-analysis/ale'
 
 " Silver Searcher
 Plug 'mileszs/ack.vim'
@@ -57,8 +59,15 @@ Plug 'mileszs/ack.vim'
 " End of Plugins
 call plug#end()
 
+" Custom function for delete trailing spaces
+func! DeleteTrailingWS()
+  exe "normal mz"
+  %s/\s\+$//e
+  exe "normal `z"
+endfunc
+
 set modelines=1
-let mapleader = " " 
+let mapleader = " "
 
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
@@ -88,15 +97,21 @@ let g:ctrlp_working_path_mode = 'ra'
 let g:airline_theme='badwolf'
 let g:fzf_layout = { 'down': '~40%' }
 
+" Quick fixes for ale
+let g:ale_linters = {'python': ['flake8']}
+let g:ale_fixers = {'*': [],
+      \'python': ['black', 'isort'],
+      \'typescript': ['prettier'],
+      \'javascript':['prettier']}
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 1
+let g:ale_fix_on_save = 1
 " bind \ (backward slash) to grep shortcut
-" command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 nnoremap \ :Ag<SPACE>
 
 
 " FZF Config Settings
 command! -bang ProjectFiles call fzf#vim#files('~/Dev', <bang>0)
-command! -bang -nargs=? -complete=dir Files
-    \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--preview', 'cat {}']}, <bang>0)
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
   \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
@@ -110,10 +125,10 @@ nnoremap <C-f> :NERDTreeFind<CR>
 
 
 " You completer
-nnoremap <silent> <leader>gd :YouCompleter GoTo<CR>
-nnoremap <silent> <leader>gf :YouCompleter FixIt<CR>
-nnoremap <silent> <leader>gr :YouCompleter GoToReferences<CR>
-nnoremap <silent> <leader>gs :YouCompleter GoToSymbol<CR>
+nnoremap <silent> <leader>gd :YcmCompleter GoTo<CR>
+nnoremap <silent> <leader>gf :YcmCompleter FixIt<CR>
+nnoremap <silent> <leader>gr :YcmCompleter GoToReferences<CR>
+nnoremap <silent> <leader>gs :YcmCompleter GoToSymbol<CR>
 
 " Remapped keys for navigating windows
 nnoremap <leader>h :wincmd h<CR>
@@ -128,6 +143,12 @@ nnoremap <leader>ps :Rg<SPACE>
 nnoremap <silent> <Leader>+ :vertical resize +5<CR>
 nnoremap <silent> <Leader>-5 :vertical resize -5<CR>
 nnoremap <leader>1 :only<CR>
+nnoremap <Leader>b :ls<CR>:b<Space>
+
 
 " Git shortcuts
 nnoremap <leader>gs :G<CR>
+
+" Delete trailing spaces
+nnoremap <leader>w :call DeleteTrailingWS()<CR>
+autocmd BufWritePre * :%s/\s\+$//e
