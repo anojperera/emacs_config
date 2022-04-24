@@ -18,7 +18,7 @@ set hidden
 set encoding=utf-8
 set showtabline=0
 set background=dark
-
+set clipboard=unnamed
 set cursorline
 hi cursorline cterm=none term=none
 autocmd WinEnter * setlocal cursorline
@@ -33,8 +33,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'preservim/nerdtree'
 
 " Theme
-Plug 'dracula/vim', { 'as': 'dracula' }
-
+Plug 'git@github.com:joshdick/onedark.vim.git'
 Plug 'jremmen/vim-ripgrep'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
@@ -51,14 +50,23 @@ Plug 'tpope/vim-commentary'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'dense-analysis/ale'
+Plug 'git@github.com:easymotion/vim-easymotion.git'
+Plug 'liuchengxu/vim-which-key'
+
+" On-demand lazy load
+Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
+
 
 " Silver Searcher
 Plug 'mileszs/ack.vim'
 
+Plug 'git@github.com:airblade/vim-rooter.git'
 
+Plug 'haya14busa/incsearch.vim'
+Plug 'haya14busa/incsearch-easymotion.vim'
 " End of Plugins
 call plug#end()
-
+colorscheme onedark
 " Custom function for delete trailing spaces
 func! DeleteTrailingWS()
   exe "normal mz"
@@ -72,15 +80,18 @@ let mapleader = " "
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 
-  " Use ag over grep
-  set grepprg=ag\ --nogroup\ --nocolor
-
   " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
 
   " " ag is fast enough that CtrlP doesn't need to cache
   let g:ctrlp_use_caching = 0
 endi
+
+if executable('rg')
+  " Use ripgrep over native
+  set grepprg=rg\ --vimgrep\ --smart-case\ --follow
+endi
+
 
 if has("autocmd")
   " Enable file type detection.
@@ -117,11 +128,17 @@ command! -bang -nargs=* Rg
   \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
   \   fzf#vim#with_preview(), <bang>0)
 
+command! -bang -nargs=* Ag
+  \ call fzf#vim#grep(
+  \   'ag --column --numbers --noheading --color --smart-case '.shellescape(<q-args>), 1,
+  \   fzf#vim#with_preview(), <bang>0)
+
+
 " Nerd tree shortcuts
 nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
-nnoremap <C-f> :NERDTreeFind<CR>
+nnoremap <C-f> :Files<CR>
 
 
 " You completer
@@ -145,6 +162,12 @@ nnoremap <silent> <Leader>-5 :vertical resize -5<CR>
 nnoremap <leader>1 :only<CR>
 nnoremap <Leader>b :ls<CR>:b<Space>
 
+
+nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+
+map z/ <Plug>(incsearch-easymotion-/)
+map z? <Plug>(incsearch-easymotion-?)
+map zg/ <Plug>(incsearch-easymotion-stay)
 
 " Git shortcuts
 nnoremap <leader>gs :G<CR>
