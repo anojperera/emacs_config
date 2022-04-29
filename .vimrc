@@ -51,7 +51,6 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'dense-analysis/ale'
 Plug 'git@github.com:easymotion/vim-easymotion.git'
-Plug 'liuchengxu/vim-which-key'
 
 " On-demand lazy load
 Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
@@ -64,6 +63,10 @@ Plug 'git@github.com:airblade/vim-rooter.git'
 
 Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/incsearch-easymotion.vim'
+Plug 'git@github.com:jiangmiao/auto-pairs.git'
+
+" Some usefull icons
+ Plug 'ryanoasis/vim-devicons'
 " End of Plugins
 call plug#end()
 colorscheme onedark
@@ -74,6 +77,7 @@ func! DeleteTrailingWS()
   exe "normal `z"
 endfunc
 
+set laststatus=2
 set modelines=1
 let mapleader = " "
 
