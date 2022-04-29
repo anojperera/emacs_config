@@ -44,6 +44,8 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 
+Plug 'preservim/nerdtree'
+
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
 Plug 'prabirshrestha/vim-lsp'
@@ -305,6 +307,8 @@ nnoremap <silent> <leader>gc :LspCodeLens<CR>
 nnoremap <silent> <leader>ff :lua  vim.lsp.buf.formatting_sync()<CR>
 " Git shortcuts
 nnoremap <leader>gs :G<CR>
+
+nnoremap <leader>n :NERDTreeFocus<CR>
 
 " Delete trailing spaces
 nnoremap <leader>w :call DeleteTrailingWS()<CR>
