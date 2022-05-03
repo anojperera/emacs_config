@@ -39,6 +39,8 @@ Plug 'mbbill/undotree'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'ryanoasis/vim-devicons'
+Plug 'tpope/vim-commentary'
+
 
 " telescope requirements...
 Plug 'nvim-lua/popup.nvim'
@@ -61,6 +63,9 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
+
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
 
 " For vsnip users.
 Plug 'hrsh7th/cmp-vsnip'
@@ -308,7 +313,8 @@ nnoremap <silent> <leader>ff :lua  vim.lsp.buf.formatting_sync()<CR>
 " Git shortcuts
 nnoremap <leader>gs :G<CR>
 
-nnoremap <leader>n :NERDTreeFocus<CR>
+nnoremap <leader>n :NERDTreeToggle<CR>
+nnoremap <leader>t :NERDTreeFind<CR>
 
 " Delete trailing spaces
 nnoremap <leader>w :call DeleteTrailingWS()<CR>
