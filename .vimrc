@@ -37,7 +37,6 @@ Plug 'git@github.com:joshdick/onedark.vim.git'
 Plug 'jremmen/vim-ripgrep'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
-Plug 'bling/vim-bufferline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'leafgarland/typescript-vim'
 Plug 'git@github.com:ctrlpvim/ctrlp.vim.git'
@@ -85,19 +84,7 @@ endfunc
 set laststatus=2
 set modelines=1
 let mapleader = " "
-" post install (yarn install | npm install) then load plugin only for editing supported files
-Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install --frozen-lockfile --production',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }" post install (yarn install | npm install) then load plugin only for editing supported files
-Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install --frozen-lockfile --production',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }" post install (yarn install | npm install) then load plugin only for editing supported files
-Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install --frozen-lockfile --production',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }" post install (yarn install | npm install) then load plugin only for editing supported files
-Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install --frozen-lockfile --production',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
+
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 
@@ -127,17 +114,20 @@ let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_working_path_mode = 'ra'
 let g:airline_theme='badwolf'
+let g:airline#extensions#ale#enabled = 1
 let g:fzf_layout = { 'down': '~40%' }
 
 " Quick fixes for ale
-let g:ale_linters = {'python': ['flake8']}
-let g:ale_fixers = {'*': [],
+let g:ale_linters = {'python': ['flake8'], 'jsx': ['eslint'], 'javascript': ['eslint']}
+let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace'],
       \'python': ['black', 'isort'],
       \'typescript': ['prettier'],
       \'javascript':['prettier']}
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 1
 let g:ale_fix_on_save = 1
+let g:ale_completion_enabled = 1
+
 " bind \ (backward slash) to grep shortcut
 nnoremap \ :Ag<SPACE>
 
@@ -156,9 +146,8 @@ command! -bang -nargs=* Ag
 
 
 " Nerd tree shortcuts
-nnoremap <leader>n :NERDTreeFocus<CR>
-nnoremap <C-n> :NERDTree<CR>
-nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <leader>n :NERDTree<CR>
+nnoremap <leader>t :NERDTreeFind<CR>
 nnoremap <C-f> :Files<CR>
 
 
