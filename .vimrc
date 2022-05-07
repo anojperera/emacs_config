@@ -189,3 +189,4 @@ nnoremap <leader>gs :G<CR>
 " Delete trailing spaces
 nnoremap <leader>w :call DeleteTrailingWS()<CR>
 autocmd BufWritePre * :%s/\s\+$//e
+autocmd BufEnter * silent! :lcd%:p:h
