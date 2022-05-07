@@ -44,6 +44,9 @@ Plug 'tpope/vim-commentary'
 " telescope requirements...
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'nvim-telescope/telescope-file-browser.nvim'
 
 Plug 'preservim/nerdtree'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -282,6 +285,26 @@ lua <<EOF
     }
   }
 
+  -- You dont need to set any of these options. These are the default ones. Only
+  -- the loading is important
+  require('telescope').setup {
+    extensions = {
+      fzf = {
+        fuzzy = true,                    -- false will only do exact matching
+        override_generic_sorter = true,  -- override the generic sorter
+        override_file_sorter = true,     -- override the file sorter
+        case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+                                         -- the default case_mode is "smart_case"
+      }
+    }
+  }
+  -- To get fzf loaded and working with telescope, you need to call
+  -- load_extension, somewhere after setup function:
+  require('telescope').load_extension('fzf')
+
+  -- To get telescope-file-browser loaded and working with telescope,
+  -- you need to call load_extension, somewhere after setup function:
+  require("telescope").load_extension "file_browser"
 -- You will likely want to reduce updatetime which affects CursorHold
 -- note: this setting is global and should be set only once
 vim.o.updatetime = 50
@@ -295,7 +318,7 @@ EOF
 " bind \ (backward slash) to grep shortcut
 nnoremap \ :Ag<SPACE>
 
-nnoremap <C-f> :Files<CR>
+nnoremap <C-f> :Telescope find_files<CR>
 " Remapped keys for navigating windows
 nnoremap <leader>h :wincmd h<CR>
 nnoremap <leader>j :wincmd j<CR>
@@ -317,6 +340,14 @@ nnoremap <Leader>b :ls<CR>:b<Space>
 " nnoremap <silent> <leader>gc :LspCodeLens<CR>
 
 " nnoremap <silent> <leader>ff :lua  vim.lsp.buf.formatting_sync()<CR>
+"
+" Find files using Telescope command-line sugar.
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fd <cmd>Telescope file_browser<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
 " Git shortcuts
 nnoremap <leader>gs :G<CR>
 
@@ -326,3 +357,4 @@ nnoremap <leader>t :NERDTreeFind<CR>
 " Delete trailing spaces
 nnoremap <leader>w :call DeleteTrailingWS()<CR>
 autocmd BufWritePre * :%s/\s\+$//e
+autocmd BufEnter * silent! :lcd%:p:h
