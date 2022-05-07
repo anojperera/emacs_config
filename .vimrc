@@ -127,6 +127,10 @@ let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 1
 let g:ale_fix_on_save = 1
 let g:ale_completion_enabled = 1
+let g:ale_sign_column_always = 1
+let g:ale_sign_error = " "
+let g:ale_sign_warning = " "
+" local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
 
 " bind \ (backward slash) to grep shortcut
 nnoremap \ :Ag<SPACE>
