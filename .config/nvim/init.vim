@@ -34,7 +34,6 @@ Plug 'git@github.com:joshdick/onedark.vim.git'
 Plug 'jremmen/vim-ripgrep'
 Plug 'tpope/vim-fugitive'
 Plug 'bling/vim-bufferline'
-Plug 'git@github.com:ctrlpvim/ctrlp.vim.git'
 Plug 'mbbill/undotree'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
@@ -67,6 +66,9 @@ Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
 
+Plug 'jose-elias-alvarez/null-ls.nvim'
+Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
+
 " End of Plugins
 call plug#end()
 
@@ -87,9 +89,6 @@ if executable('ag')
   " Use ag over grep
   set grepprg=ag\ --nogroup\ --nocolor
 
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-" " ag is fast enough that CtrlP doesn't need to cache let g:ctrlp_use_caching = 0
 endi
 
 if has("autocmd")
@@ -102,9 +101,6 @@ if has("autocmd")
 endif
 
 let g:python3_host_prog = '/usr/local/opt/python@3.9/bin/python3'
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_working_path_mode = 'ra'
 let g:airline_theme='deus'
 let g:fzf_layout = { 'down': '~40%' }
 
@@ -177,26 +173,12 @@ lua <<EOF
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>bf', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
 
-
-    -- vim.api.nvim_create_autocmd("CursorHold", {
-    --   buffer = bufnr,
-    --   callback = function()
-    --     local opts = {
-    --       focusable = false,
-    --       close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-    --       border = 'rounded',
-    --       source = 'always',
-    --       prefix = ' ',
-    --       scope = 'cursor',
-    --     }
-    --     vim.diagnostic.open_float(nil, opts)
-    --   end
-    -- })
-
-    return require'completion'.on_attach
-
+    -- Auto format on save
+    if client.resolved_capabilities.document_formatting then
+      vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
+    end
   end
 
     -- Setup nvim-cmp.
@@ -269,14 +251,28 @@ lua <<EOF
   -- Use a loop to conveniently call 'setup' on multiple servers and
   -- map buffer local keybindings when the language server attaches
   require'lspconfig'.jedi_language_server.setup{
-    on_attach = on_attach_lspconfig,
+    on_attach = function(client, bufnr)
+        client.resolved_capabilities.document_formatting = false
+        client.resolved_capabilities.document_range_formatting = false
+        on_attach_lspconfig(client, bufnr)
+        return require'completion'.on_attach
+    end,
     capabilities = capabilities,
     cmd = { "jedi-language-server" },
     filetypes = {"python"}
     }
 
   require'lspconfig'.tsserver.setup{
-    on_attach = on_attach_lspconfig,
+    on_attach = function(client, bufnr)
+        client.resolved_capabilities.document_formatting = false
+        client.resolved_capabilities.document_range_formatting = false
+
+        local ts_utils = require("nvim-lsp-ts-utils")
+        ts_utils.setup({})
+        ts_utils.setup_client(client)
+        on_attach_lspconfig(client, bufnr)
+        return require'completion'.on_attach
+    end,
     capabilities = capabilities,
     cmd = { "typescript-language-server", "--stdio" },
     filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
@@ -298,6 +294,16 @@ lua <<EOF
       }
     }
   }
+
+  -- null-ls setup
+  require("null-ls").setup({
+    sources = {
+        require("null-ls").builtins.formatting.prettier,
+        require("null-ls").builtins.formatting.black,
+    },
+    on_attach = on_attach_lspconfig,
+  })
+
   -- To get fzf loaded and working with telescope, you need to call
   -- load_extension, somewhere after setup function:
   require('telescope').load_extension('fzf')
@@ -305,11 +311,11 @@ lua <<EOF
   -- To get telescope-file-browser loaded and working with telescope,
   -- you need to call load_extension, somewhere after setup function:
   require("telescope").load_extension "file_browser"
--- You will likely want to reduce updatetime which affects CursorHold
--- note: this setting is global and should be set only once
-vim.o.updatetime = 50
-vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
-vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})]]
+  -- You will likely want to reduce updatetime which affects CursorHold
+  -- note: this setting is global and should be set only once
+  vim.o.updatetime = 50
+  vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
+  vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})]]
 
 EOF
 
