@@ -281,6 +281,12 @@ lua <<EOF
     }
   }
 
+  require'lspconfig'.clangd.setup{
+      capabilities = capabilities,
+      cmd = { "clangd" },
+      filetypes = { "c", "cpp", "objc", "objcpp", "h", "hpp" },
+  }
+
   -- You dont need to set any of these options. These are the default ones. Only
   -- the loading is important
   require('telescope').setup {
