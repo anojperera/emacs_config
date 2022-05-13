@@ -39,6 +39,7 @@ Plug 'nvim-lualine/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-commentary'
+Plug 'git@github.com:preservim/tagbar.git'
 
 " telescope requirements...
 Plug 'nvim-lua/popup.nvim'
@@ -419,6 +420,7 @@ nnoremap <leader>gs :G<CR>
 
 nnoremap <leader>n :NERDTreeToggle<CR>
 nnoremap <leader>t :NERDTreeFind<CR>
+nnoremap <leader>tg :TagbarToggle<CR>
 
 " Delete trailing spaces
 nnoremap <leader>w :call DeleteTrailingWS()<CR>
