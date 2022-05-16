@@ -39,7 +39,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'leafgarland/typescript-vim'
-Plug 'git@github.com:ctrlpvim/ctrlp.vim.git'
 Plug 'git@github.com:ycm-core/YouCompleteMe.git'
 Plug 'git@github.com:ackyshake/VimCompletesMe.git'
 Plug 'git@github.com:Vimjas/vim-python-pep8-indent.git'
@@ -110,9 +109,6 @@ if has("autocmd")
   " ...
 endif
 
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_working_path_mode = 'ra'
 let g:airline_theme='badwolf'
 let g:airline#extensions#ale#enabled = 1
 let g:fzf_layout = { 'down': '~40%' }
