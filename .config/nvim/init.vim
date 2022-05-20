@@ -259,7 +259,7 @@ lua <<EOF
 
   -- Use a loop to conveniently call 'setup' on multiple servers and
   -- map buffer local keybindings when the language server attaches
-  require'lspconfig'.jedi_language_server.setup{
+  require("lspconfig").jedi_language_server.setup{
     on_attach = function(client, bufnr)
         client.resolved_capabilities.document_formatting = false
         client.resolved_capabilities.document_range_formatting = false
@@ -271,7 +271,7 @@ lua <<EOF
     filetypes = {"python"}
     }
 
-  require'lspconfig'.tsserver.setup{
+  require("lspconfig").tsserver.setup{
     on_attach = function(client, bufnr)
         client.resolved_capabilities.document_formatting = false
         client.resolved_capabilities.document_range_formatting = false
@@ -290,7 +290,7 @@ lua <<EOF
     }
   }
 
-  require'lspconfig'.clangd.setup{
+  require("lspconfig").clangd.setup{
       capabilities = capabilities,
       cmd = { "clangd" },
       filetypes = { "c", "cpp", "objc", "objcpp", "h", "hpp" },
