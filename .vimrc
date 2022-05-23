@@ -126,6 +126,8 @@ let g:ale_completion_enabled = 1
 let g:ale_sign_column_always = 1
 let g:ale_sign_error = " "
 let g:ale_sign_warning = " "
+let g:ale_sign_info = " "
+let g:ale_sign_hint = " "
 " local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
 
 " bind \ (backward slash) to grep shortcut
