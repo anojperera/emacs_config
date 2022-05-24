@@ -66,7 +66,12 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
+
+" For luasnip users.
+Plug 'L3MON4D3/LuaSnip'
+Plug 'saadparwaiz1/cmp_luasnip'
 
 Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
@@ -197,8 +202,8 @@ lua <<EOF
     snippet = {
       -- REQUIRED - you must specify a snippet engine
       expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+        -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+        require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
         -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
         -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
       end,
@@ -218,8 +223,8 @@ lua <<EOF
       { name = 'nvim_lsp' },
       { name = 'vsnip' }, -- For vsnip users.
       -- { name = 'luasnip' }, -- For luasnip users.
-      -- { name = 'ultisnips' }, -- For ultisnips users.
-      -- { name = 'snippy' }, -- For snippy users.
+      { name = 'ultisnips' }, -- For ultisnips users.
+      { name = 'snippy' }, -- For snippy users.
     }, {
       { name = 'buffer' },
     })
@@ -259,17 +264,38 @@ lua <<EOF
 
   -- Use a loop to conveniently call 'setup' on multiple servers and
   -- map buffer local keybindings when the language server attaches
-  require("lspconfig").jedi_language_server.setup{
-    on_attach = function(client, bufnr)
-        client.resolved_capabilities.document_formatting = false
-        client.resolved_capabilities.document_range_formatting = false
-        on_attach_lspconfig(client, bufnr)
-        return require'completion'.on_attach
-    end,
-    capabilities = capabilities,
-    cmd = { "jedi-language-server" },
-    filetypes = {"python"}
-    }
+  -- require("lspconfig").jedi_language_server.setup{
+  --   on_attach = function(client, bufnr)
+  --       client.resolved_capabilities.document_formatting = false
+  --       client.resolved_capabilities.document_range_formatting = false
+  --       on_attach_lspconfig(client, bufnr)
+  --       return require'completion'.on_attach
+  --   end,
+  --   capabilities = capabilities,
+  --   cmd = { "jedi-language-server" },
+  --  filetypes = {"python"}
+  --  }
+
+  require("lspconfig").pyright.setup{
+     on_attach = function(client, bufnr)
+         client.resolved_capabilities.document_formatting = false
+         client.resolved_capabilities.document_range_formatting = false
+         on_attach_lspconfig(client, bufnr)
+         return require'completion'.on_attach
+     end,
+     capabilities = capabilities,
+     cmd = { "pyright-langserver", "--stdio" },
+    filetypes = {"python"},
+    settings = {
+        python = {
+          analysis = {
+            autoSearchPaths = true,
+            diagnosticMode = "workspace",
+            useLibraryCodeForTypes = true
+          }
+        }
+      }
+  }
 
   require("lspconfig").tsserver.setup{
     on_attach = function(client, bufnr)
@@ -320,7 +346,7 @@ lua <<EOF
   })
 
 
-  require'nvim-treesitter.configs'.setup {
+  require("nvim-treesitter.configs").setup {
     -- A list of parser names, or "all"
     ensure_installed = { "c", "cpp", "python", "javascript", "json", "html", "json5", "tsx", "typescript", "yaml", "sparql" },
 
@@ -377,6 +403,7 @@ lua <<EOF
   -- To get telescope-file-browser loaded and working with telescope,
   -- you need to call load_extension, somewhere after setup function:
   require("telescope").load_extension "file_browser"
+
   -- You will likely want to reduce updatetime which affects CursorHold
   -- note: this setting is global and should be set only once
   vim.o.updatetime = 50
