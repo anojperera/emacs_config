@@ -39,6 +39,7 @@ Plug 'nvim-lualine/lualine.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-commentary'
+Plug 'sheerun/vim-polyglot'
 Plug 'git@github.com:preservim/tagbar.git'
 
 " telescope requirements...
@@ -82,6 +83,9 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install --frozen-lockfile --production',
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
+
+
+Plug 'git@github.com:ycm-core/YouCompleteMe.git'
 
 " End of Plugins
 call plug#end()
@@ -409,9 +413,25 @@ lua <<EOF
   vim.o.updatetime = 50
   vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
   vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false, scope="cursor"})]]
+  if (vim.bo.filetype == 'python') then
+    vim.cmd [[autocmd! CursorHold,CursorHoldI * YcmCompleter GetDoc]]
+  end
 
 EOF
 
+let g:ycm_python_binary_path = 'python3'
+let g:ycm_filetype_blacklist = {
+      \ 'html': 1,
+      \ 'jsx': 1,
+      \ 'xml': 1,
+      \ 'js' : 1,
+      \ 'ts': 1,
+      \ 'tsx': 1
+      \ }
+
+let g:ycm_filetype_whitelist = {
+      \ 'python': 1
+      \ }
 
 
 " bind \ (backward slash) to grep shortcut
