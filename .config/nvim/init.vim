@@ -86,6 +86,8 @@ Plug 'prettier/vim-prettier', {
 
 
 Plug 'git@github.com:ycm-core/YouCompleteMe.git'
+Plug 'dense-analysis/ale'
+
 
 " End of Plugins
 call plug#end()
@@ -344,7 +346,7 @@ lua <<EOF
   require("null-ls").setup({
     sources = {
         require("null-ls").builtins.formatting.prettier,
-        require("null-ls").builtins.formatting.black,
+        -- require("null-ls").builtins.formatting.black,
     },
     on_attach = on_attach_lspconfig,
   })
@@ -426,13 +428,25 @@ let g:ycm_filetype_blacklist = {
       \ 'xml': 1,
       \ 'js' : 1,
       \ 'ts': 1,
-      \ 'tsx': 1
+      \ 'tsx': 1,
+      \ 'c': 1,
+      \ 'h': 1
       \ }
 
 let g:ycm_filetype_whitelist = {
       \ 'python': 1
       \ }
 
+
+let g:ale_linters = {}
+let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace'],
+      \'python': ['black', 'isort']}
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 1
+let g:ale_fix_on_save = 1
+let g:ale_completion_enabled = 1
+let g:ale_typescript_prettier_use_local_config = 1
+let g:ale_linters_explicit = 1
 
 " bind \ (backward slash) to grep shortcut
 nnoremap \ :Ag<SPACE>
