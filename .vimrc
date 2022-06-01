@@ -45,6 +45,8 @@ Plug 'git@github.com:Vimjas/vim-python-pep8-indent.git'
 Plug 'sheerun/vim-polyglot'
 Plug 'mbbill/undotree'
 Plug 'tpope/vim-commentary'
+Plug 'vim-scripts/c.vim'
+
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'dense-analysis/ale'
