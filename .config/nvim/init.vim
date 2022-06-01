@@ -41,6 +41,7 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-commentary'
 Plug 'sheerun/vim-polyglot'
 Plug 'git@github.com:preservim/tagbar.git'
+Plug 'vim-scripts/c.vim'
 
 " telescope requirements...
 Plug 'nvim-lua/popup.nvim'
@@ -264,20 +265,7 @@ lua <<EOF
 
   require("nvim-lsp-installer").setup{}
 
-  -- Use a loop to conveniently call 'setup' on multiple servers and
   -- map buffer local keybindings when the language server attaches
-  -- require("lspconfig").jedi_language_server.setup{
-  --   on_attach = function(client, bufnr)
-  --       client.resolved_capabilities.document_formatting = false
-  --       client.resolved_capabilities.document_range_formatting = false
-  --       on_attach_lspconfig(client, bufnr)
-  --       return require'completion'.on_attach
-  --   end,
-  --   capabilities = capabilities,
-  --   cmd = { "jedi-language-server" },
-  --  filetypes = {"python"}
-  --  }
-
   require("lspconfig").pyright.setup{
      on_attach = function(client, bufnr)
          client.resolved_capabilities.document_formatting = false
@@ -319,6 +307,9 @@ lua <<EOF
   }
 
   require("lspconfig").clangd.setup{
+      on_attach = function(client, bufnr)
+        return require("completion").on_attach
+      end,
       capabilities = capabilities,
       cmd = { "clangd" },
       filetypes = { "c", "cpp", "objc", "objcpp", "h", "hpp" },
@@ -463,13 +454,6 @@ nnoremap <silent> <Leader>-5 :vertical resize -5<CR>
 nnoremap <leader>1 :only<CR>
 nnoremap <Leader>b :ls<CR>:b<Space>
 
-" nnoremap <silent> <leader>gd :LspDefinition<CR>
-" nnoremap <silent> <leader>gr :LspReferences<CR>
-" nnoremap <silent> <leader>gp :LspPeekTypeDefinition<CR>
-" nnoremap <silent> <leader>gc :LspCodeLens<CR>
-
-" nnoremap <silent> <leader>ff :lua  vim.lsp.buf.formatting_sync()<CR>
-"
 " Find files using Telescope command-line sugar.
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fd <cmd>Telescope file_browser<cr>
