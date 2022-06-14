@@ -26,6 +26,8 @@ highlight CursorLine guibg=#ff0000 ctermbg=234
 set bs=2
 set wrap linebreak nolist
 
+set cindent
+
 " Plugins
 call plug#begin('~/.config/nvim/plugged')
 " Theme
@@ -42,6 +44,7 @@ Plug 'tpope/vim-commentary'
 Plug 'sheerun/vim-polyglot'
 Plug 'git@github.com:preservim/tagbar.git'
 Plug 'vim-scripts/c.vim'
+Plug 'airblade/vim-gitgutter'
 
 " telescope requirements...
 Plug 'nvim-lua/popup.nvim'
@@ -70,6 +73,9 @@ Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
+
+Plug 'L3MON4D3/LuaSnip'
+Plug 'saadparwaiz1/cmp_luasnip'
 
 Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
@@ -205,8 +211,8 @@ lua <<EOF
     snippet = {
       -- REQUIRED - you must specify a snippet engine
       expand = function(args)
-        -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-        require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
         -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
         -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
       end,
@@ -308,6 +314,10 @@ lua <<EOF
 
   require("lspconfig").clangd.setup{
       on_attach = function(client, bufnr)
+        client.resolved_capabilities.document_formatting = false
+        client.resolved_capabilities.document_range_formatting = false
+
+         on_attach_lspconfig(client, bufnr)
         return require("completion").on_attach
       end,
       capabilities = capabilities,
