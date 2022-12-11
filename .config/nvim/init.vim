@@ -42,7 +42,6 @@ Plug 'kyazdani42/nvim-web-devicons'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-commentary'
 Plug 'sheerun/vim-polyglot'
-Plug 'git@github.com:preservim/tagbar.git'
 Plug 'vim-scripts/c.vim'
 Plug 'lewis6991/gitsigns.nvim'
 
@@ -85,9 +84,9 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'hashivim/vim-terraform'
 
 " post install (yarn install | npm install) then load plugin only for editing supported files
-Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install --frozen-lockfile --production',
-  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
+" Plug 'prettier/vim-prettier', {
+"   \ 'do': 'yarn install --frozen-lockfile --production',
+"   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
 
 
 " End of Plugins
@@ -311,6 +310,20 @@ lua <<EOF
     }
   }
 
+  require("lspconfig").astro.setup{
+    on_attach = function(client, bufnr)
+        local ts_utils = require("nvim-lsp-ts-utils")
+        ts_utils.setup({})
+        ts_utils.setup_client(client)
+
+        on_attach_lspconfig(client, bufnr)
+        return require'completion'.on_attach
+    end,
+    capabilities = capabilities,
+    cmd = { "astro-ls", "--stdio" },
+    filetypes = { "astro" },
+  }
+
   require("lspconfig").clangd.setup{
       on_attach = function(client, bufnr)
         client.server_capabilities.documentFormattingProvider = false
@@ -369,7 +382,7 @@ lua <<EOF
 
   require("nvim-treesitter.configs").setup {
     -- A list of parser names, or "all"
-    ensure_installed = { "c", "cpp", "python", "javascript", "json", "html", "json5", "tsx", "typescript", "yaml", "sparql" },
+    ensure_installed = { "c", "cpp", "python", "javascript", "json", "html", "json5", "tsx", "typescript", "yaml", "sparql", "astro" },
 
     -- Install parsers synchronously (only applied to `ensure_installed`)
     sync_install = false,
@@ -393,7 +406,7 @@ lua <<EOF
       -- Instead of true it can also be a list of languages
       additional_vim_regex_highlighting = {'org'}, -- Required for spellcheck, some LaTex highlights and code block highlights that do not have ts grammar
     },
-    ensure_installed = {'org'}, -- Or run :TSUpdate org
+    ensure_installed = {'org', 'astro'}, -- Or run :TSUpdate org
     textobjects = {
       move = {
         enable = true,
@@ -476,3 +489,4 @@ nnoremap <leader>tg :TagbarToggle<CR>
 nnoremap <leader>w :call DeleteTrailingWS()<CR>
 autocmd BufWritePre * :%s/\s\+$//e
 autocmd BufEnter * silent! :lcd%:p:h
+autocmd BufRead,BufEnter *.astro set filetype=astro

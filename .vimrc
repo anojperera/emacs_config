@@ -56,14 +56,12 @@ Plug 'git@github.com:easymotion/vim-easymotion.git'
 Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 
 
-" Silver Searcher
-Plug 'mileszs/ack.vim'
-
 Plug 'git@github.com:airblade/vim-rooter.git'
 
 Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/incsearch-easymotion.vim'
 Plug 'git@github.com:jiangmiao/auto-pairs.git'
+Plug 'wuelnerdotexe/vim-astro'
 
 " post install (yarn install | npm install) then load plugin only for editing supported files
 Plug 'prettier/vim-prettier', {
@@ -133,7 +131,7 @@ let g:ale_sign_hint = " "
 " local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
 
 " bind \ (backward slash) to grep shortcut
-nnoremap \ :Ag<SPACE>
+nnoremap \ :Rg<SPACE>
 
 
 " FZF Config Settings
@@ -141,11 +139,6 @@ command! -bang ProjectFiles call fzf#vim#files('~/Dev', <bang>0)
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
   \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
-  \   fzf#vim#with_preview(), <bang>0)
-
-command! -bang -nargs=* Ag
-  \ call fzf#vim#grep(
-  \   'ag --column --numbers --noheading --color --smart-case '.shellescape(<q-args>), 1,
   \   fzf#vim#with_preview(), <bang>0)
 
 
