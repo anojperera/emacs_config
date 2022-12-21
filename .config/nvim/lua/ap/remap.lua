@@ -9,7 +9,7 @@ vim.keymap.set("n", "<leader>v", function() vim.cmd("wincmd v") end)
 vim.keymap.set("n", "<leader>s", function() vim.cmd("wincmd s") end)
 vim.keymap.set("n", "<leader>q", function() vim.cmd("wincmd q") end)
 vim.keymap.set("n", "<leader>1", vim.cmd.only)
--- vim.keymap.set("n", "<leader>b", ls<CR>:b<Space>
--- vim.keymap.set("n", "<silent> <Leader>+ :vertical resize +5<CR>
+-- vim.keymap.set("n", "<leader>b", function() vim.cmd("ls") end) -- This is used by telescope
+-- vim.keymap.set("n", "<silent> <Leader>+ :vertical reoize +5<CR>
 -- vim.keymap.set("n", "<silent> <Leader>-5 :vertical resize -5<CR>
 -- vim.keymap.set("n", "<leader>ps :Rg<SPACE>
