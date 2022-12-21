@@ -368,7 +368,8 @@ lua <<EOF
     sources = {
         require("null-ls").builtins.formatting.prettier,
         require("null-ls").builtins.formatting.black,
-        require("null-ls").builtins.formatting.clang_format
+        require("null-ls").builtins.formatting.clang_format,
+        require("null-ls").builtins.formatting.astro
     },
     on_attach = on_attach_lspconfig,
   })
