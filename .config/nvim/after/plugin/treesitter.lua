@@ -1,6 +1,7 @@
-require'nvim-treesitter.configs'.setup {
+require 'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
-  ensure_installed = { "c", "cpp", "python", "javascript", "json", "html", "json5", "tsx", "typescript", "yaml", "sparql", "astro" },
+  ensure_installed = { "c", "cpp", "python", "javascript", "json", "html", "json5", "tsx", "typescript", "yaml", "sparql",
+    "astro" },
 
 
   -- Automatically install missing parsers when entering buffer
@@ -10,6 +11,16 @@ require'nvim-treesitter.configs'.setup {
   ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
   -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
 
+  indent = { enable = true },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = '<C-SPACE>',
+      node_incremental = '<C-SPACE>',
+      scope_incremental = '<C-s>',
+      node_decremental = '<C-BACKSPACE>',
+    },
+  },
   highlight = {
     -- `false` will disable the whole extension
     enable = true,

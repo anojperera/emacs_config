@@ -49,7 +49,6 @@ lsp.set_preferences({
 
 lsp.on_attach(function(client, bufnr)
   local opts = { buffer = bufnr, remap = false }
-
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   vim.keymap.set('n', '<space>gD', function() vim.lsp.buf.declaration() end, opts)
@@ -66,7 +65,7 @@ lsp.on_attach(function(client, bufnr)
   vim.keymap.set('n', '<space>rn', function() vim.lsp.buf.rename() end, opts)
   vim.keymap.set('n', '<space>ca', function() vim.lsp.buf.code_action() end, opts)
   vim.keymap.set('n', '<space>gr', function() vim.lsp.buf.references() end, opts)
-  vim.keymap.set('n', '<space>bf', function() vim.lsp.buf.formatting() end, opts)
+  vim.keymap.set('n', '<space>bf', function() vim.lsp.buf.format({ async = true }) end, opts)
 
   -- Auto format on save
   if client.server_capabilities.documentFormattingProvider then
