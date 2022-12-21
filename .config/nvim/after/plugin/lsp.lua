@@ -6,6 +6,7 @@ lsp.ensure_installed({
 	'pyright',
 	'clangd',
 	'eslint',
+  'sumneko_lua',
 })
 
 local cmp = require('cmp')
@@ -41,6 +42,9 @@ lsp.set_preferences({
     vim.keymap.set('n', '<space>K', function() vim.lsp.buf.hover() end, opts)
     vim.keymap.set('n', '<space>gi', function() vim.lsp.buf.implementation() end, opts)
     vim.keymap.set('n', '<space>wa', function() vim.lsp.buf.add_workspace_folder() end, opts)
+    vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
+    vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
+    vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
     vim.keymap.set('n', '<space>wr', function() vim.lsp.buf.remove_workspace_folder() end, opts)
     vim.keymap.set('n', '<space>wl', function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, opts)
     vim.keymap.set('n', '<space>D', function() vim.lsp.buf.type_definition() end, opts)
