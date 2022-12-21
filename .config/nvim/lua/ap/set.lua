@@ -1,0 +1,20 @@
+vim.opt.tabstop=2 
+vim.opt.softtabstop=2
+
+vim.opt.shiftwidth=2
+vim.opt.expandtab = true
+vim.opt.smartindent = true
+vim.opt.nu = true
+vim.opt.wrap = false
+vim.opt.smartcase = true
+vim.opt.swapfile = false 
+vim.opt.backup = false 
+vim.opt.undodir= os.getenv("HOME") .. "/.config/nvim/undodir"
+vim.opt.undofile = true
+vim.opt.incsearch = true
+vim.opt.hidden = true
+vim.opt.encoding = "utf-8"
+vim.opt.showtabline = 0
+vim.opt.background = "dark"
+vim.opt.clipboard = "unnamed"
+vim.opt.cursorline = true
