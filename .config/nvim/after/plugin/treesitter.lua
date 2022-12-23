@@ -31,4 +31,9 @@ require 'nvim-treesitter.configs'.setup {
     -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = false,
   },
+  -- HTML auto tag completion
+  autotag = {
+    enable = true,
+    filetypes = { "html", "xml", "astro" },
+  },
 }
