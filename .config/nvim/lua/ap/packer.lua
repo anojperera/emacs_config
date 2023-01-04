@@ -61,5 +61,4 @@ return require('packer').startup(function(use)
     end
   }
 
-  use('jremmen/vim-ripgrep')
 end)
