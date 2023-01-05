@@ -12,4 +12,6 @@ vim.keymap.set("n", "<leader>1", vim.cmd.only)
 -- vim.keymap.set("n", "<leader>b", function() vim.cmd("ls") end) -- This is used by telescope
 -- vim.keymap.set("n", "<silent> <Leader>+ :vertical reoize +5<CR>
 -- vim.keymap.set("n", "<silent> <Leader>-5 :vertical resize -5<CR>
--- vim.keymap.set("n", "<leader>ps :Rg<SPACE>
+--
+-- use :Rg <keyword> -g '*.py' to filter out file types
+vim.keymap.set("n", "<leader>fr", ":Rg<SPACE>")
