@@ -7,7 +7,6 @@ vim.keymap.set('n', '\\', function()
   builtin.grep_string({ search = vim.fn.input("Grep > ") })
 end)
 vim.keymap.set('n', '<leader>fl', builtin.live_grep, {})
-vim.keymap.set('n', '<leader>fg', builtin.grep_string, {})
 
 
 require("telescope").load_extension "file_browser"
