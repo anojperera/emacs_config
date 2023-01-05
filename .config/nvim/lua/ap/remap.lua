@@ -15,3 +15,15 @@ vim.keymap.set("n", "<leader>1", vim.cmd.only)
 --
 -- use :Rg <keyword> -g '*.py' to filter out file types
 vim.keymap.set("n", "<leader>fr", ":Rg<SPACE>")
+
+-- Move highlited region
+vim.keymap.set("v", "J", ":m '>+<CR>gv=gv")
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
+
+-- keep pasting
+vim.keymap.set("x", "<leader>p", "\"_dP")
+
+vim.keymap.set("n", "<leader>y", "\"+y")
+vim.keymap.set("v", "<leader>y", "\"+y")
+vim.keymap.set("n", "<leader>Y", "\"+Y")
