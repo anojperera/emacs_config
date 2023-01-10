@@ -49,6 +49,7 @@ lsp.set_preferences({
 
 lsp.on_attach(function(client, bufnr)
   local opts = { buffer = bufnr, remap = false }
+  local telescope = require('telescope.builtin')
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   vim.keymap.set('n', '<space>gD', function() vim.lsp.buf.declaration() end, opts)
@@ -66,6 +67,9 @@ lsp.on_attach(function(client, bufnr)
   vim.keymap.set('n', '<space>ca', function() vim.lsp.buf.code_action() end, opts)
   vim.keymap.set('n', '<space>gr', function() vim.lsp.buf.references() end, opts)
   vim.keymap.set('n', '<space>bf', function() vim.lsp.buf.format({ async = true }) end, opts)
+
+  vim.keymap.set('n', '<space>ds', function() telescope.lsp_document_symbols() end, opts)
+  vim.keymap.set('n', '<space>ws', function() telescope.lsp_dynamic_workspace_symbols() end, opts)
 
   -- Auto format on save
   if client.server_capabilities.documentFormattingProvider then
