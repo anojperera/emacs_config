@@ -6,7 +6,6 @@ lsp.ensure_installed({
   'pyright',
   'clangd',
   'eslint',
-  'sumneko_lua',
 })
 
 local cmp = require('cmp')
