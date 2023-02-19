@@ -61,4 +61,6 @@ return require('packer').startup(function(use)
     end
   }
   use('jremmen/vim-ripgrep')
+
+  use('jose-elias-alvarez/null-ls.nvim')
 end)
