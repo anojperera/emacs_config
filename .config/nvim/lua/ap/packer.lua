@@ -21,6 +21,7 @@ return require('packer').startup(function(use)
 
   -- Tree sitter
   use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
+  use 'nvim-treesitter/nvim-treesitter-context'
 
   use('mbbill/undotree')
   use('tpope/vim-fugitive')
@@ -69,4 +70,5 @@ return require('packer').startup(function(use)
       "iamcco/markdown-preview.nvim",
       run = function() vim.fn["mkdp#util#install"]() end,
   })
+
 end)
