@@ -13,7 +13,6 @@ require('gitsigns').setup {
     map('n', '<leader>hs', ':Gitsigns stage_hunk<CR>')
     map('v', '<leader>hs', ':Gitsigns stage_hunk<CR>')
     map('n', '<leader>hr', ':Gitsigns reset_hunk<CR>')
-    map('v', '<leader>hr', ':Gitsigns reset_hunk<CR>')
     map('n', '<leader>hS', '<cmd>Gitsigns stage_buffer<CR>')
     map('n', '<leader>hu', '<cmd>Gitsigns undo_stage_hunk<CR>')
     map('n', '<leader>hR', '<cmd>Gitsigns reset_buffer<CR>')
