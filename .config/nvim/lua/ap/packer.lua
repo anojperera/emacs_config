@@ -55,12 +55,8 @@ return require('packer').startup(function(use)
 
   use('nvim-lualine/lualine.nvim')
 
-  use {
-    'lewis6991/gitsigns.nvim',
-    config = function()
-      require('gitsigns').setup()
-    end
-  }
+  use ('lewis6991/gitsigns.nvim')
+
   use('jremmen/vim-ripgrep')
 
   use('jose-elias-alvarez/null-ls.nvim')
