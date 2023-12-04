@@ -70,15 +70,6 @@ lsp.on_attach(function(client, bufnr)
   vim.keymap.set('n', '<space>ds', function() telescope.lsp_document_symbols() end, opts)
   vim.keymap.set('n', '<space>ws', function() telescope.lsp_dynamic_workspace_symbols() end, opts)
 
-  if client.name == "tsserver" then
-    client.server_capabilities.documentFormattingProvider = false
-  end
-
-  -- Auto format on save
-  if client.server_capabilities.documentFormattingProvider then
-    vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting()")
-  end
-
 end)
 
 lsp.setup()

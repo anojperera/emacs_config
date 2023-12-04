@@ -58,8 +58,7 @@ return require('packer').startup(function(use)
   use ('lewis6991/gitsigns.nvim')
 
   use('jremmen/vim-ripgrep')
-
-  use('jose-elias-alvarez/null-ls.nvim')
+  use('stevearc/conform.nvim')
 
   -- install without yarn or npm
   use({
