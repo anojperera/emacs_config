@@ -3,14 +3,14 @@ local lsp = require('lsp-zero')
 lsp.preset('recommended')
 require('mason').setup({})
 require('mason-lspconfig').setup({
-  -- Replace the language servers listed here 
+  -- Replace the language servers listed here
   -- with the ones you want to install
   ensure_installed = {
-  'tsserver',
-  'pyright',
-  'clangd',
-  'eslint',
-},
+    'tsserver',
+    'pyright',
+    'clangd',
+    'eslint',
+  },
   handlers = {
     function(server_name)
       require('lspconfig')[server_name].setup({})
@@ -20,13 +20,6 @@ require('mason-lspconfig').setup({
 
 local cmp = require('cmp')
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
-local cmp_mappings = lsp.defaults.cmp_mappings({
-  ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-  ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-  ['<CR>'] = cmp.mapping.confirm({ select = true }),
-  ["<C-Space>"] = cmp.mapping.complete(),
-  ['<C-e>'] = cmp.mapping.abort(),
-})
 
 -- If you want insert `(` after select function or method item
 local cmp_autopairs = require('nvim-autopairs.completion.cmp')
@@ -34,6 +27,28 @@ cmp.event:on(
   'confirm_done',
   cmp_autopairs.on_confirm_done()
 )
+
+cmp.setup({
+  sources = {
+    { name = 'path' },
+    { name = 'nvim_lsp' },
+    { name = 'buffer' },
+    { name = 'cmdline' },
+    { name = 'cmp_git' },
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
+    ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    ["<C-Space>"] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.abort(),
+  }),
+  snippet = {
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body)
+    end,
+  },
+})
 
 local signs = { error = " ", warn = " ", hint = " ", info = " " }
 lsp.set_preferences({
