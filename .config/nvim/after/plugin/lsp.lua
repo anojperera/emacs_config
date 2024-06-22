@@ -1,11 +1,21 @@
 local lsp = require('lsp-zero')
 
 lsp.preset('recommended')
-lsp.ensure_installed({
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  -- Replace the language servers listed here 
+  -- with the ones you want to install
+  ensure_installed = {
   'tsserver',
   'pyright',
   'clangd',
   'eslint',
+},
+  handlers = {
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
+  },
 })
 
 local cmp = require('cmp')
@@ -24,17 +34,6 @@ cmp.event:on(
   'confirm_done',
   cmp_autopairs.on_confirm_done()
 )
-
-lsp.setup_nvim_cmp({
-  mapping = cmp_mappings,
-  sources = {
-    { name = 'path' },
-    { name = 'nvim_lsp' },
-    { name = 'buffer' },
-    { name = 'cmdline' },
-    { name = 'cmp_git' },
-  }
-})
 
 local signs = { error = " ", warn = " ", hint = " ", info = " " }
 lsp.set_preferences({
@@ -69,7 +68,6 @@ lsp.on_attach(function(client, bufnr)
 
   vim.keymap.set('n', '<space>ds', function() telescope.lsp_document_symbols() end, opts)
   vim.keymap.set('n', '<space>ws', function() telescope.lsp_dynamic_workspace_symbols() end, opts)
-
 end)
 
 lsp.setup()
