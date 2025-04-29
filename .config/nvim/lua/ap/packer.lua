@@ -71,4 +71,6 @@ return require('packer').startup(function(use)
     "folke/lsp-trouble.nvim",
     requires = "kyazdani42/nvim-web-devicons",
   }
+
+  use('rcarriga/nvim-notify')
 end)
