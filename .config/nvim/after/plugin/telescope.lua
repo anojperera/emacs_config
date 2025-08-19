@@ -11,3 +11,10 @@ vim.keymap.set('n', '<leader>fl', builtin.live_grep, {})
 
 require("telescope").load_extension "file_browser"
 vim.keymap.set('n', '<leader>fd', ":Telescope file_browser<CR>", {})
+
+
+-- Org File
+require('telescope').load_extension('orgmode')
+vim.keymap.set("n", "<leader>or", require("telescope").extensions.orgmode.refile_heading)
+vim.keymap.set("n", "<leader>oh", require("telescope").extensions.orgmode.search_headings)
+vim.keymap.set("n", "<leader>oi", require("telescope").extensions.orgmode.insert_link)

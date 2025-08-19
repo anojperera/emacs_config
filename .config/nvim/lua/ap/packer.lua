@@ -15,6 +15,7 @@ return require('packer').startup(function(use)
   })
 
   use({ "nvim-telescope/telescope-file-browser.nvim" })
+  use({ "nvim-orgmode/telescope-orgmode.nvim" })
 
   -- Using Packer
   use('navarasu/onedark.nvim')
@@ -73,4 +74,21 @@ return require('packer').startup(function(use)
   }
 
   use('rcarriga/nvim-notify')
+
+  use({
+    'nvim-orgmode/orgmode',
+    config = function()
+      require('orgmode').setup({
+        org_agenda_files = '~/org_files/**/*',
+        org_default_notes_file = '~/org_files/refile.org',
+      })
+    end
+  })
+
+  use({
+    "akinsho/org-bullets.nvim",
+    config = function()
+      require('org-bullets').setup()
+    end
+  })
 end)
