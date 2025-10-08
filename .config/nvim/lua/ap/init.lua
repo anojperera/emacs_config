@@ -1,3 +1,3 @@
 require("ap.remap")
-require("ap.packer")
+require("ap.lazy")
 require("ap.set")
