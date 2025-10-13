@@ -7,7 +7,7 @@ return {
     "nvim-treesitter/nvim-treesitter",
     event = { "BufReadPost", "BufWritePost", "BufNewFile" },
     config = function()
-    require 'nvim-treesitter.configs'.setup {
+    require('nvim-treesitter.configs').setup({
       -- A list of parser names, or "all"
       ensure_installed = { "c", "cpp", "python", "javascript", "json", "html", "json5", "tsx", "typescript", "yaml", "sparql",
         "astro" },
@@ -40,12 +40,8 @@ return {
         -- Instead of true it can also be a list of languages
         additional_vim_regex_highlighting = false,
       },
-      -- HTML auto tag completion
-      autotag = {
-        enable = true,
-      },
       folds = { enable = true }
-    }
+    })
     end
   },
   -- Automatically add closing tags for HTML and JSX
@@ -53,6 +49,9 @@ return {
     "windwp/nvim-ts-autotag",
     event = { "BufReadPost", "BufWritePost", "BufNewFile" },
     opts = {},
+    config = function()
+      require('nvim-ts-autotag').setup()
+    end
   },
   { 'nvim-treesitter/nvim-treesitter-context' },
 }
