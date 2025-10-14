@@ -13,20 +13,43 @@ return {
   
   {'jremmen/vim-ripgrep' },
 
-  {
-    "folke/lsp-trouble.nvim",
-    dependencies = "kyazdani42/nvim-web-devicons",
-    config = function() 
-      local builtin = require("trouble")
-      builtin.setup()
-      vim.keymap.set("n", "<leader>xx", function() builtin.toggle() end)
-      vim.keymap.set("n", "<leader>xw", function() builtin.toggle("workspace_diagnostics") end)
-      vim.keymap.set("n", "<leader>xd", function() builtin.toggle("document_diagnostics") end)
-      vim.keymap.set("n", "<leader>xq", function() builtin.toggle("quickfix") end)
-      vim.keymap.set("n", "<leader>xl", function() builtin.toggle("loclist") end)
-      vim.keymap.set("n", "gR", function() builtin.toggle("lsp_references") end)
-    end
+{
+  "folke/trouble.nvim",
+  opts = {}, -- for default options, refer to the configuration section for custom setup.
+  cmd = "Trouble",
+  keys = {
+    {
+      "<leader>xx",
+      "<cmd>Trouble diagnostics toggle<cr>",
+      desc = "Diagnostics (Trouble)",
+    },
+    {
+      "<leader>xb",
+      "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+      desc = "Buffer Diagnostics (Trouble)",
+    },
+    {
+      "<leader>xs",
+      "<cmd>Trouble symbols toggle focus=false<cr>",
+      desc = "Symbols (Trouble)",
+    },
+    {
+      "<leader>xl",
+      "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+      desc = "LSP Definitions / references / ... (Trouble)",
+    },
+    {
+      "<leader>xL",
+      "<cmd>Trouble loclist toggle<cr>",
+      desc = "Location List (Trouble)",
+    },
+    {
+      "<leader>xQ",
+      "<cmd>Trouble qflist toggle<cr>",
+      desc = "Quickfix List (Trouble)",
+    },
   },
+}
   -- Which key pop up
   {
     "folke/which-key.nvim",
