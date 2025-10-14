@@ -10,7 +10,7 @@ return {
     "windwp/nvim-autopairs",
     config = function() require("nvim-autopairs").setup {} end
   },
-
+  
   {'jremmen/vim-ripgrep' },
 
   {
@@ -26,6 +26,7 @@ return {
       vim.keymap.set("n", "gR", function() builtin.toggle("lsp_references") end)
     end
   },
+  -- Which key pop up
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
