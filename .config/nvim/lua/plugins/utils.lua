@@ -18,6 +18,7 @@ return {
     dependencies = "kyazdani42/nvim-web-devicons",
     config = function() 
       local builtin = require("trouble")
+      builtin.setup()
       vim.keymap.set("n", "<leader>xx", function() builtin.toggle() end)
       vim.keymap.set("n", "<leader>xw", function() builtin.toggle("workspace_diagnostics") end)
       vim.keymap.set("n", "<leader>xd", function() builtin.toggle("document_diagnostics") end)
