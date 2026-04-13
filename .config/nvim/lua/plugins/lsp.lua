@@ -41,6 +41,14 @@ return {
             function(server_name)
               require('lspconfig')[server_name].setup({})
             end,
+            ['ts_ls'] = function()
+              require('lspconfig').ts_ls.setup({
+                root_dir = require('lspconfig.util').root_pattern(
+                  'tsconfig.json', 'jsconfig.json', 'package.json', '.git'
+                ),
+                single_file_support = false,
+              })
+            end,
           },
         })
 
