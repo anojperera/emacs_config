@@ -9,8 +9,15 @@ return {
     config = function()
     require('nvim-treesitter.configs').setup({
       -- A list of parser names, or "all"
-      ensure_installed = { "c", "cpp", "python", "javascript", "json", "html", "json5", "tsx", "typescript", "yaml", "sparql",
-        "astro" },
+      ensure_installed = {
+        "c", "cpp", "python",
+        "javascript", "typescript", "tsx",
+        "json", "json5", "jsonc",
+        "html", "css",
+        "yaml",
+        "latex",
+        "astro", "sparql",
+      },
 
 
       -- Automatically install missing parsers when entering buffer

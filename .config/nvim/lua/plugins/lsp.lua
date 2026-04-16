@@ -1,128 +1,139 @@
 return {
 
-  { 
+  {
     'williamboman/mason.nvim',
     config = function()
-        require('mason').setup({})
+      require('mason').setup({})
     end
   },
 
   {
-      'neovim/nvim-lspconfig',
-      dependencies = {
-        -- lsp support
-        { 'williamboman/mason-lspconfig.nvim' },
+    'neovim/nvim-lspconfig',
+    dependencies = {
+      { 'williamboman/mason-lspconfig.nvim' },
+      { 'hrsh7th/nvim-cmp' },
+      { 'hrsh7th/cmp-buffer' },
+      { 'hrsh7th/cmp-path' },
+      { 'saadparwaiz1/cmp_luasnip' },
+      { 'hrsh7th/cmp-nvim-lsp' },
+      { 'hrsh7th/cmp-nvim-lua' },
+      { 'l3mon4d3/luasnip' },
+      { 'rafamadriz/friendly-snippets' },
+    },
 
-        -- autocompletion
-        { 'hrsh7th/nvim-cmp' },
-        { 'hrsh7th/cmp-buffer' },
-        { 'hrsh7th/cmp-path' },
-        { 'saadparwaiz1/cmp_luasnip' },
-        { 'hrsh7th/cmp-nvim-lsp' },
-        { 'hrsh7th/cmp-nvim-lua' },
+    config = function()
+      local lspconfig = require('lspconfig')
+      local util = require('lspconfig.util')
 
-        -- snippets
-        { 'l3mon4d3/luasnip' },
-        { 'rafamadriz/friendly-snippets' },
-      },
+      require('mason-lspconfig').setup({
+        ensure_installed = {
+          'ts_ls',    -- JavaScript / JSX / TypeScript
+          'pyright',  -- Python
+          'clangd',   -- C / C++
+          'eslint',   -- ESLint diagnostics + code actions
+          'yamlls',   -- YAML
+          'jsonls',   -- JSON
+          'html',     -- HTML
+          'cssls',    -- CSS
+          'texlab',   -- LaTeX
+        },
+        handlers = {
+          -- default handler
+          function(server_name)
+            lspconfig[server_name].setup({})
+          end,
 
-      config = function() 
-       local lsp = vim.lsp.lspconfig
-       require('mason-lspconfig').setup({
-          -- Replace the language servers listed here
-          -- with the ones you want to install
-          ensure_installed = {
-            'ts_ls',
-            'pyright',
-            'clangd',
-            'eslint',
-          },
-          handlers = {
-            function(server_name)
-              require('lspconfig')[server_name].setup({})
-            end,
-            ['ts_ls'] = function()
-              require('lspconfig').ts_ls.setup({
-                root_dir = require('lspconfig.util').root_pattern(
-                  'tsconfig.json', 'jsconfig.json', 'package.json', '.git'
-                ),
-                single_file_support = false,
-              })
-            end,
-          },
-        })
+          -- JavaScript/TypeScript: require a project root so ts_ls indexes
+          -- the full workspace (enables cross-file find-references)
+          ['ts_ls'] = function()
+            lspconfig.ts_ls.setup({
+              root_dir = util.root_pattern(
+                'tsconfig.json', 'jsconfig.json', 'package.json', '.git'
+              ),
+              single_file_support = false,
+            })
+          end,
 
-        local cmp = require('cmp')
-        local cmp_select = { behavior = cmp.SelectBehavior.Select }
+          ['jsonls'] = function()
+            lspconfig.jsonls.setup({
+              settings = {
+                json = { validate = { enable = true } },
+              },
+            })
+          end,
 
-        -- If you want insert `(` after select function or method item
-        local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-        cmp.event:on(
-          'confirm_done',
-          cmp_autopairs.on_confirm_done()
-        )
+          ['yamlls'] = function()
+            lspconfig.yamlls.setup({
+              settings = {
+                yaml = { validate = true, hover = true, completion = true },
+              },
+            })
+          end,
+        },
+      })
 
-        cmp.setup({
-          sources = {
-            { name = 'path' },
-            { name = 'nvim_lsp' },
-            { name = 'buffer' },
-            { name = 'cmdline' },
-            { name = 'cmp_git' },
-          },
-          mapping = cmp.mapping.preset.insert({
-            ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-            ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-            ['<CR>'] = cmp.mapping.confirm({ select = true }),
-            ["<C-Space>"] = cmp.mapping.complete(),
-            ['<C-e>'] = cmp.mapping.abort(),
-          }),
-          snippet = {
-            expand = function(args)
-              require('luasnip').lsp_expand(args.body)
-            end,
-          },
-        })
+      -- Completion
+      local cmp = require('cmp')
+      local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
-        -- local signs = { error = " ", warn = " ", hint = " ", info = " " }
-        -- lsp.set_preferences({
-        --   suggest_lsp_servers = true,
-        --   setup_servers_on_start = true,
-        --   configure_diagnostics = true,
-        --   cmp_capabilities = true,
-        --   manage_nvim_cmp = true,
-        --   sign_icons = signs
-        -- })
+      local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+      cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
 
-        local telescope = require('telescope.builtin')
-        -- Mappings.
-        -- See `:help vim.lsp.*` for documentation on any of the below functions
-        vim.keymap.set('n', '<space>gD', function() vim.lsp.buf.declaration() end, opts)
-        vim.keymap.set('n', '<space>gd', function() vim.lsp.buf.definition() end, opts)
-        vim.keymap.set('n', '<space>K', function() vim.lsp.buf.hover() end, opts)
-        vim.keymap.set('n', '<space>gi', function() vim.lsp.buf.implementation() end, opts)
-        vim.keymap.set('n', '<space>wa', function() vim.lsp.buf.add_workspace_folder() end, opts)
-        vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
-        vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
-        vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
-        vim.keymap.set('n', '<space>wr', function() vim.lsp.buf.remove_workspace_folder() end, opts)
-        vim.keymap.set('n', '<space>wl', function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, opts)
-        vim.keymap.set('n', '<space>D', function() vim.lsp.buf.type_definition() end, opts)
-        vim.keymap.set('n', '<space>rn', function() vim.lsp.buf.rename() end, opts)
-        vim.keymap.set('n', '<space>ca', function() vim.lsp.buf.code_action() end, opts)
-        vim.keymap.set('n', '<space>gr', function() vim.lsp.buf.references() end, opts)
-        vim.keymap.set('n', '<space>bf', function() vim.lsp.buf.format({ async = true }) end, opts)
+      cmp.setup({
+        sources = {
+          { name = 'path' },
+          { name = 'nvim_lsp' },
+          { name = 'nvim_lua' },
+          { name = 'luasnip' },
+          { name = 'buffer' },
+        },
+        mapping = cmp.mapping.preset.insert({
+          ['<C-p>']     = cmp.mapping.select_prev_item(cmp_select),
+          ['<C-n>']     = cmp.mapping.select_next_item(cmp_select),
+          ['<CR>']      = cmp.mapping.confirm({ select = true }),
+          ['<C-Space>'] = cmp.mapping.complete(),
+          ['<C-e>']     = cmp.mapping.abort(),
+        }),
+        snippet = {
+          expand = function(args)
+            require('luasnip').lsp_expand(args.body)
+          end,
+        },
+      })
 
-        vim.keymap.set('n', '<space>ds', function() telescope.lsp_document_symbols() end, opts)
-        vim.keymap.set('n', '<space>ws', function() telescope.lsp_dynamic_workspace_symbols() end, opts)
+      -- Keymaps
+      local opts = { noremap = true, silent = true }
+      local telescope = require('telescope.builtin')
 
-        vim.diagnostic.config({
-          virtual_text = false,
-          signs = true,
-          underline = true,
-          update_in_insert = false,
-          severity_sort = false,
-        })
-      end
-    }
+      vim.keymap.set('n', '<space>gD', function() vim.lsp.buf.declaration() end, opts)
+      vim.keymap.set('n', '<space>gd', function() vim.lsp.buf.definition() end, opts)
+      vim.keymap.set('n', '<space>K',  function() vim.lsp.buf.hover() end, opts)
+      vim.keymap.set('n', '<space>gi', function() vim.lsp.buf.implementation() end, opts)
+      vim.keymap.set('n', '<space>D',  function() vim.lsp.buf.type_definition() end, opts)
+      vim.keymap.set('n', '<space>rn', function() vim.lsp.buf.rename() end, opts)
+      vim.keymap.set('n', '<space>ca', function() vim.lsp.buf.code_action() end, opts)
+      vim.keymap.set('n', '<space>bf', function() vim.lsp.buf.format({ async = true }) end, opts)
+
+      -- Use telescope for references/symbols (nicer than quickfix)
+      vim.keymap.set('n', '<space>gr', function() telescope.lsp_references() end, opts)
+      vim.keymap.set('n', '<space>ds', function() telescope.lsp_document_symbols() end, opts)
+      vim.keymap.set('n', '<space>ws', function() telescope.lsp_dynamic_workspace_symbols() end, opts)
+
+      vim.keymap.set('n', '<space>wa', function() vim.lsp.buf.add_workspace_folder() end, opts)
+      vim.keymap.set('n', '<space>wr', function() vim.lsp.buf.remove_workspace_folder() end, opts)
+      vim.keymap.set('n', '<space>wl', function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, opts)
+
+      vim.keymap.set('n', '<leader>vd', function() vim.diagnostic.open_float() end, opts)
+      vim.keymap.set('n', '[d', function() vim.diagnostic.goto_next() end, opts)
+      vim.keymap.set('n', ']d', function() vim.diagnostic.goto_prev() end, opts)
+
+      vim.diagnostic.config({
+        virtual_text = false,
+        signs = true,
+        underline = true,
+        update_in_insert = false,
+        severity_sort = true,
+      })
+    end
+  }
 }

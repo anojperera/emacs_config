@@ -1,2 +1,1 @@
 require("ap")
-print("Hello")
