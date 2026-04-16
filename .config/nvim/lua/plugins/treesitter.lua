@@ -38,16 +38,9 @@ return {
         },
       },
       highlight = {
-        -- `false` will disable the whole extension
         enable = true,
-
-        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-        -- Using this option may slow down your editor, and you may see some duplicate highlights.
-        -- Instead of true it can also be a list of languages
         additional_vim_regex_highlighting = false,
       },
-      folds = { enable = true }
     })
     end
   },
@@ -55,9 +48,15 @@ return {
   {
     "windwp/nvim-ts-autotag",
     event = { "BufReadPost", "BufWritePost", "BufNewFile" },
-    opts = {},
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
     config = function()
-      require('nvim-ts-autotag').setup()
+      require('nvim-ts-autotag').setup({
+        opts = {
+          enable_close = true,
+          enable_rename = true,
+          enable_close_on_slash = false,
+        },
+      })
     end
   },
   { 'nvim-treesitter/nvim-treesitter-context' },
