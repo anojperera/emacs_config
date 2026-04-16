@@ -16,7 +16,6 @@ return {
         "json", "json5", "jsonc",
         "html", "css",
         "yaml",
-        "latex",
         "astro", "sparql",
       },
 
