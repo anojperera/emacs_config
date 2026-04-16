@@ -5,11 +5,13 @@ return {
   -- syntax highlighting.
   {
     "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
     event = { "BufReadPost", "BufWritePost", "BufNewFile" },
     config = function()
     require('nvim-treesitter.configs').setup({
       -- A list of parser names, or "all"
       ensure_installed = {
+        "lua", "vim", "vimdoc",
         "c", "cpp", "python",
         "javascript", "typescript", "tsx",
         "json", "json5", "jsonc",
