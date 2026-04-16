@@ -103,7 +103,6 @@ return {
 
       -- Keymaps
       local opts = { noremap = true, silent = true }
-      local telescope = require('telescope.builtin')
 
       vim.keymap.set('n', '<space>gD', function() vim.lsp.buf.declaration() end, opts)
       vim.keymap.set('n', '<space>gd', function() vim.lsp.buf.definition() end, opts)
@@ -114,10 +113,11 @@ return {
       vim.keymap.set('n', '<space>ca', function() vim.lsp.buf.code_action() end, opts)
       vim.keymap.set('n', '<space>bf', function() vim.lsp.buf.format({ async = true }) end, opts)
 
-      -- Use telescope for references/symbols (nicer than quickfix)
-      vim.keymap.set('n', '<space>gr', function() telescope.lsp_references() end, opts)
-      vim.keymap.set('n', '<space>ds', function() telescope.lsp_document_symbols() end, opts)
-      vim.keymap.set('n', '<space>ws', function() telescope.lsp_dynamic_workspace_symbols() end, opts)
+      -- Require telescope lazily inside callbacks so a slow/unloaded telescope
+      -- doesn't abort this entire config function at startup
+      vim.keymap.set('n', '<space>gr', function() require('telescope.builtin').lsp_references() end, opts)
+      vim.keymap.set('n', '<space>ds', function() require('telescope.builtin').lsp_document_symbols() end, opts)
+      vim.keymap.set('n', '<space>ws', function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end, opts)
 
       vim.keymap.set('n', '<space>wa', function() vim.lsp.buf.add_workspace_folder() end, opts)
       vim.keymap.set('n', '<space>wr', function() vim.lsp.buf.remove_workspace_folder() end, opts)
